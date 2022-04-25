@@ -19,14 +19,14 @@ pub struct Blockchain {
 }
 
 impl Blockchain {
-    pub fn new () -> Self {
+    pub fn new() -> Self {
         Blockchain {
             blocks: vec![],
             unspent_outputs: HashSet::new(),
         }
     }
 
-    pub fn update_with_block (&mut self, block: Block) -> Result<(), BlockValidationErr> {
+    pub fn update_with_block(&mut self, block: Block) -> Result<(), BlockValidationErr> {
         let i = self.blocks.len();
 
         if block.index != i as u32 {
@@ -60,9 +60,8 @@ impl Blockchain {
             for transaction in transactions {
                 let input_hashes = transaction.input_hashes();
 
-                if
-                    !(&input_hashes - &self.unspent_outputs).is_empty() ||
-                    !(&input_hashes & &block_spent).is_empty()
+                if !(&input_hashes - &self.unspent_outputs).is_empty()
+                    || !(&input_hashes & &block_spent).is_empty()
                 {
                     return Err(BlockValidationErr::InvalidInput);
                 }
@@ -88,7 +87,8 @@ impl Blockchain {
                 block_created.extend(coinbase.output_hashes());
             }
 
-            self.unspent_outputs.retain(|output| !block_spent.contains(output));
+            self.unspent_outputs
+                .retain(|output| !block_spent.contains(output));
             self.unspent_outputs.extend(block_created);
         }
 
