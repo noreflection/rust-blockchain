@@ -10,10 +10,8 @@ pub struct Output {
 impl Hashable for Output {
     fn bytes(&self) -> Vec<u8> {
         let mut bytes = vec![];
-
         bytes.extend(self.to_addr.as_bytes());
         bytes.extend(&u64_bytes(&self.value));
-
         bytes
     }
 }
